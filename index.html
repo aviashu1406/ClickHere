@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hi Ashu — A Question From Avi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #f6d58a;
+      --rose: #ff6b8a;
+      --deep: #2a0a18;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      color: #fff8f2;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(40, 12, 22, 0.28), rgba(70, 18, 32, 0.42)),
+        url("question-bg.jpg") center 38% / cover no-repeat fixed,
+        #e8b48a;
+    }
+
+    .petals,
+    .sparkles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .petal,
+    .sparkle {
+      position: absolute;
+      top: -10%;
+      animation: fall linear infinite;
+    }
+
+    .petal {
+      width: 14px;
+      height: 18px;
+      border-radius: 70% 10% 70% 10%;
+      background: radial-gradient(circle at 30% 30%, #ffd1dc, #e14b6a);
+      opacity: 0.85;
+      transform: rotate(20deg);
+    }
+
+    .sparkle {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ffe9b0;
+      box-shadow: 0 0 10px #ffd27a;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      background: rgba(18, 4, 10, 0.28);
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+    }
+
+    .overlay.hidden,
+    .hidden {
+      display: none !important;
+    }
+
+    .overlay-card,
+    .card,
+    .yes-card {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 42px 36px 36px;
+      max-width: 720px;
+      width: min(92vw, 720px);
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(48, 12, 24, 0.62), rgba(90, 22, 40, 0.72));
+      border: 1px solid rgba(246, 213, 138, 0.4);
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+    }
+
+    .kicker {
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    h1, .script {
+      font-family: "Great Vibes", cursive;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .overlay h1 {
+      font-size: clamp(2.4rem, 7vw, 4.2rem);
+      margin-bottom: 12px;
+    }
+
+    .overlay p,
+    .card p,
+    .yes-card p {
+      font-size: 1.2rem;
+      opacity: 0.92;
+    }
+
+    .question {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.7rem, 5vw, 2.7rem);
+      margin: 8px 0 8px;
+    }
+
+    .sub {
+      font-style: italic;
+      margin-bottom: 28px;
+      color: #ffe3c4;
+    }
+
+    .actions {
+      position: relative;
+      min-height: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+    }
+
+    button {
+      font-family: "Playfair Display", serif;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .yes-btn {
+      padding: 14px 42px;
+      font-size: 1.25rem;
+      border-radius: 999px;
+      color: #3a1020;
+      background: linear-gradient(180deg, #ffe7a8, #f3c56a);
+      box-shadow: 0 10px 30px rgba(243, 197, 106, 0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 3;
+    }
+
+    .yes-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 14px 36px rgba(243, 197, 106, 0.7);
+    }
+
+    .no-btn {
+      position: absolute;
+      padding: 14px 38px;
+      font-size: 1.15rem;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      left: 62%;
+      top: 36%;
+      z-index: 4;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .stage {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 236, 220, 0.08), rgba(60, 12, 28, 0.38)),
+        url("question-bg.jpg") center 38% / cover no-repeat;
+    }
+
+    .yes-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(40, 10, 16, 0.28), rgba(70, 18, 22, 0.45)),
+        url("answer-bg.jpg") center 42% / cover no-repeat;
+    }
+
+    .yes-screen.show {
+      display: grid;
+      animation: fadeIn 0.7s ease;
+    }
+
+    .yes-card h2 {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      color: #ffe7b0;
+      margin-bottom: 10px;
+    }
+
+    .welcome {
+      font-size: clamp(1.15rem, 3vw, 1.4rem);
+      line-height: 1.7;
+      margin: 10px 0 22px;
+    }
+
+    .names {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      color: #ffd7e4;
+      margin-top: 8px;
+    }
+
+    .mine {
+      font-size: 1.35rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    .music-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 60;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffe9b8;
+      border: 1px solid rgba(246, 213, 138, 0.45);
+      font-size: 1.15rem;
+    }
+
+    .hearts-burst {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 30;
+      overflow: hidden;
+    }
+
+    .burst-heart {
+      position: absolute;
+      font-size: 22px;
+      animation: burst 2.4s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% { transform: translateY(0) scale(0.4); opacity: 1; }
+      100% { transform: translateY(-80vh) scale(1.4); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 640px) {
+      .actions { min-height: 180px; }
+      .no-btn { left: 55%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+  <div class="sparkles" id="sparkles"></div>
+
+  <div class="overlay" id="startOverlay">
+    <div class="overlay-card">
+      <div class="kicker">For Ashu</div>
+      <h1>A little question</h1>
+      <p>Tap anywhere to open this with music</p>
+    </div>
+  </div>
+
+  <main class="stage" id="questionStage">
+    <section class="card">
+      <div class="kicker">From Avi, with love</div>
+      <p class="question">Hi, Ashu</p>
+      <h1 class="script" style="font-size: clamp(2.4rem, 8vw, 4.4rem); margin-bottom: 10px;">Will You Marry Me??</h1>
+      <p class="sub">There is only one right answer, my love.</p>
+      <div class="actions" id="actions">
+        <button class="yes-btn" id="yesBtn" type="button">Yes</button>
+        <button class="no-btn" id="noBtn" type="button" tabindex="-1">No</button>
+      </div>
+    </section>
+  </main>
+
+  <section class="yes-screen" id="yesScreen" aria-live="polite">
+    <div class="yes-card">
+      <div class="kicker">Forever starts now</div>
+      <h2>Welcome, my love</h2>
+      <p class="welcome">
+        Ashu, you just said the word my heart has been waiting for.
+        Today the world feels softer, brighter, and completely ours.
+        I promise to keep choosing you — in every laugh, every quiet evening,
+        and every tomorrow we get to share.
+      </p>
+      <p class="mine">Yes, you are all mine now.</p>
+      <p class="names">Avi &amp; Ashu</p>
+    </div>
+  </section>
+
+  <div class="hearts-burst" id="heartsBurst"></div>
+  <button class="music-btn" id="musicBtn" type="button" title="Music">♪</button>
+
+  <audio id="song" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const startOverlay = document.getElementById("startOverlay");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const actions = document.getElementById("actions");
+    const yesScreen = document.getElementById("yesScreen");
+    const heartsBurst = document.getElementById("heartsBurst");
+    const musicBtn = document.getElementById("musicBtn");
+    const song = document.getElementById("song");
+
+    let musicOn = true;
+
+    function decorateSky() {
+      const petals = document.getElementById("petals");
+      const sparkles = document.getElementById("sparkles");
+      for (let i = 0; i < 18; i += 1) {
+        const p = document.createElement("span");
+        p.className = "petal";
+        p.style.left = Math.random() * 100 + "%";
+        p.style.animationDuration = 8 + Math.random() * 10 + "s";
+        p.style.animationDelay = Math.random() * 8 + "s";
+        p.style.opacity = String(0.45 + Math.random() * 0.5);
+        petals.appendChild(p);
+      }
+      for (let i = 0; i < 24; i += 1) {
+        const s = document.createElement("span");
+        s.className = "sparkle";
+        s.style.left = Math.random() * 100 + "%";
+        s.style.animationDuration = 6 + Math.random() * 8 + "s";
+        s.style.animationDelay = Math.random() * 6 + "s";
+        sparkles.appendChild(s);
+      }
+    }
+
+    async function playMusic() {
+      song.volume = 0.7;
+      try {
+        await song.play();
+      } catch (err) {
+        console.log("Music will start after a tap.");
+      }
+      musicOn = true;
+      musicBtn.textContent = "♪";
+    }
+
+    function pauseMusic() {
+      musicOn = false;
+      song.pause();
+      musicBtn.textContent = "🔇";
+    }
+
+    startOverlay.addEventListener("click", () => {
+      startOverlay.classList.add("hidden");
+      playMusic();
+    });
+
+    musicBtn.addEventListener("click", () => {
+      if (musicOn) pauseMusic();
+      else playMusic();
+    });
+
+    function moveNo() {
+      const area = actions.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+      const pad = 8;
+      const maxX = Math.max(pad, area.width - btn.width - pad);
+      const maxY = Math.max(pad, area.height - btn.height - pad);
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    function blockNo(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      moveNo();
+    }
+
+    ["mouseenter", "mousemove", "pointerdown", "touchstart", "click"].forEach((evt) => {
+      noBtn.addEventListener(evt, blockNo, { passive: false });
+    });
+
+    document.addEventListener("mousemove", (event) => {
+      const box = noBtn.getBoundingClientRect();
+      const dx = event.clientX - (box.left + box.width / 2);
+      const dy = event.clientY - (box.top + box.height / 2);
+      const distance = Math.hypot(dx, dy);
+      if (distance < 90) moveNo();
+    });
+
+    function celebrate() {
+      yesScreen.classList.add("show");
+      noBtn.style.display = "none";
+      for (let i = 0; i < 40; i += 1) {
+        const h = document.createElement("span");
+        h.className = "burst-heart";
+        h.textContent = i % 3 === 0 ? "💖" : i % 3 === 1 ? "✨" : "💗";
+        h.style.left = Math.random() * 100 + "%";
+        h.style.bottom = Math.random() * 20 + "%";
+        h.style.animationDelay = Math.random() * 0.8 + "s";
+        heartsBurst.appendChild(h);
+      }
+      playMusic();
+    }
+
+    yesBtn.addEventListener("click", celebrate);
+
+    decorateSky();
+  </script>
+</body>
+</html>
